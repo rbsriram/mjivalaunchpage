@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mjiva - Your Brain, Supercharged!</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000, #333333);
+            color: #ffffff;
+            text-align: center;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+        .email-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .email-input {
+            padding: 10px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            width: 250px;
+            margin-bottom: 10px;
+        }
+        .email-submit {
+            padding: 15px 30px;
+            font-size: 1rem;
+            color: #0d0d0d;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .email-submit:hover {
+            background-color: #e6b800;
+        }
+        .countdown {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <img src="logo.png" alt="mjiva Logo" class="logo">
+    <h1><span style="color: #ffcc00; font-weight: bold; text-shadow: 0px 0px 10px #ffcc00;">mjiva</span><br>Think It. Capture It. Keep It.</h1>
+    <div style="text-align: left; max-width: 600px;">
+    <p>Your brain is overloaded. Important stuff vanishes.
+       Forget sticky notes and mental chaos. This sorts it all.
+       Dump your thoughts. Keep what matters.</p>
+    <p>You know you’ll forget. Fix that now - lock in your early access before you forget again.</p>
+</div>
+    <div class="countdown" id="countdown"></div>
+    
+    <div class="email-container">
+        <input type="email" class="email-input" placeholder="Enter your email" id="email">
+        <button class="email-submit" onclick="subscribe()">I’m In!</button>
+    </div>
+    
+    <script>
+        function subscribe() {
+    const button = document.querySelector('.email-submit');
+    button.style.backgroundColor = '#4CAF50'; // Change color to green on click
+    button.textContent = 'Submitting...'; // Change text to indicate submission
+            const email = document.getElementById('email').value;
+            if (email) {
+                fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email: email })
+                })
+                .then(response => response.text())
+                .then(data => {
+                    button.style.backgroundColor = '#008CBA'; // Change color to blue on success
+                    button.textContent = 'Subscribed!'; // Update button text
+                    document.getElementById('email').value = ""; // Clear input
+                })
+                .catch(error => console.error("Error:", error));
+            } else {
+                button.style.backgroundColor = '#f44336'; // Change color to red on error
+                button.textContent = 'Try Again';
+            }
+        }
+
+        // Countdown Timer
+        const launchDate = new Date("April 2, 2025 12:00:00").getTime();
+        const countdown = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+            if (distance < 0) {
+                clearInterval(interval);
+                countdown.innerHTML = "We're Live!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
