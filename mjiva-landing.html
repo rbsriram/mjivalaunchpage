@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="config.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mjiva - Your Brain, Supercharged!</title>
@@ -89,7 +90,7 @@
     button.textContent = 'Submitting...'; // Change text to indicate submission
             const email = document.getElementById('email').value;
             if (email) {
-                fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+                fetch(GOOGLE_APPS_SCRIPT_URL, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: email })
