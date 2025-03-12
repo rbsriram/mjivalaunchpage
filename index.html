@@ -94,7 +94,6 @@
     
     <div class="email-container">
         <form id="signup-form">
-            <!-- Form configuration will be injected by JavaScript -->
             <input type="email" name="email" class="email-input" placeholder="Enter your email" id="email" required>
             <button type="submit" class="email-submit" id="submit-btn">I'm In!</button>
             <div id="status-message"></div>
@@ -108,43 +107,19 @@
             document.getElementById('site-name').textContent = CONFIG.siteName;
             document.getElementById('site-tagline').textContent = CONFIG.siteTagline;
             
-            // Configure the form
-            const form = document.getElementById('signup-form');
-            
-            // Set form action and method
-            form.action = 'https://formsubmit.co/' + CONFIG.form.email;
-            form.method = 'POST';
-            
-            // Add hidden fields for FormSubmit configuration
-            const hiddenFields = [
-                { name: '_subject', value: CONFIG.form.subject },
-                { name: '_captcha', value: 'false' },
-                { name: '_template', value: 'box' },
-                { name: '_next', value: CONFIG.form.thankYouPage },
-                { name: '_sheet', value: 'https://docs.google.com/spreadsheets/d/' + CONFIG.form.googleSheetId + '/edit' }
-            ];
-            
-            // Create and append hidden fields
-            hiddenFields.forEach(field => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = field.name;
-                input.value = field.value;
-                form.appendChild(input);
-            });
-            
             // Form elements
             const submitBtn = document.getElementById('submit-btn');
             const emailInput = document.getElementById('email');
             const statusMessage = document.getElementById('status-message');
+            const form = document.getElementById('signup-form');
 
-            // Add form submission handler
+            // Add form submission handler with Google Forms
             form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent default submission
                 const email = emailInput.value.trim();
                 
                 // Basic validation
                 if (!isValidEmail(email)) {
-                    event.preventDefault();
                     submitBtn.style.backgroundColor = '#f44336';
                     submitBtn.textContent = 'Try Again';
                     statusMessage.textContent = 'Please enter a valid email address';
@@ -155,7 +130,43 @@
                 // Visual feedback during submission
                 submitBtn.style.backgroundColor = '#FFA500';
                 submitBtn.textContent = 'Submitting...';
-                // Form will submit naturally - no need to prevent default
+                statusMessage.textContent = 'Sending...';
+                statusMessage.className = '';
+                
+                // Create the Google Form submission URL
+                const encodedEmail = encodeURIComponent(email);
+                const googleFormUrl = `https://docs.google.com/forms/d/e/${CONFIG.form.googleFormId}/formResponse?entry.${CONFIG.form.googleFormEntryId}=${encodedEmail}&submit=Submit`;
+                
+                // Create a hidden iframe to submit the form
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                
+                // Set a timeout to show success message regardless of response
+                setTimeout(() => {
+                    // Success feedback
+                    submitBtn.style.backgroundColor = '#4CAF50';
+                    submitBtn.textContent = 'Subscribed!';
+                    statusMessage.textContent = 'Thank you! We\'ve received your email.';
+                    statusMessage.className = 'success';
+                    emailInput.value = "";
+                    
+                    // Reset after 5 seconds
+                    setTimeout(() => {
+                        submitBtn.style.backgroundColor = '#ffcc00';
+                        submitBtn.textContent = 'I\'m In!';
+                        statusMessage.textContent = '';
+                        
+                        // Redirect if configured (optional)
+                        if (CONFIG.form.thankYouPage) {
+                            window.location.href = CONFIG.form.thankYouPage;
+                        }
+                    }, 3000);
+                    
+                }, 1500);
+                
+                // Navigate the iframe to the form URL
+                iframe.src = googleFormUrl;
             });
             
             function isValidEmail(email) {
