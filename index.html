@@ -142,7 +142,7 @@
                 submitBtn.disabled = true;
                 
                 // Send to Google Sheet
-                fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+                fetch("GOOGLE_APPS_SCRIPT_URL", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ email: email })
