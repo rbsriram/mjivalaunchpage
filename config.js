@@ -7,7 +7,7 @@ const CONFIG = {
         subject: "New mjiva Signup!",           // Email subject line
         googleFormId: "1FAIpQLScA3D8Fq0lPyQw1Ve9xnz2jI0mKjDxV_vQp8jRsfh9tzrkqaA",   // Google Form ID from the URL
         googleFormEntryId: "1020424641"             // Entry ID from the pre-filled URL
-    },
+    }, 
     
     // Launch date settings (format: month day, year hour:minute:second)
     launchDate: "April 2, 2025 12:00:00",
