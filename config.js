@@ -14,5 +14,5 @@ const CONFIG = {
     
     // Site information
     siteName: "mjiva",
-    siteTagline: "Think It. Capture It. Keep It."
+    siteTagline: "Think It. Capture It. Do it."
 };
